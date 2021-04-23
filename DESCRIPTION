@@ -1,7 +1,7 @@
 Package: maczic
 Type: Package
 Title: Mediation Analysis for Count and Zero-Inflated Count Data
-Version: 0.1.0
+Version: 0.2.0
 Author: Nancy Cheng, Zijian Guo, Jing Cheng
 Maintainer: Nancy Cheng <Nancy.Cheng@ucsf.edu>
 Depends: R (>= 4.0), MASS, pscl, graphics
@@ -17,12 +17,15 @@ Description: Performs causal mediation analysis for count and zero-inflated
     <doi:10.1177/0962280216686131>. Implements Instrumental Variable (IV) 
     method to estimate the controlled (natural) direct and mediation effects, 
     and compute the bootstrap Confidence Intervals as described by Guo, Z., 
-    Small, D.S., Gansky, S.A., Cheng, J. (2018) <doi:10.1111/rssc.12233>.
+    Small, D.S., Gansky, S.A., Cheng, J. (2018) <doi:10.1111/rssc.12233>. This 
+    software was made possible by Grant R03DE028410 from the The National 
+    Institute of Dental and Craniofacial Research, a component of the National 
+    Institutes of Health.
 License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
 NeedsCompilation: no
-Packaged: 2020-11-04 22:11:23 UTC; NCheng
+Packaged: 2021-04-23 17:24:44 UTC; NCheng
 Repository: CRAN
-Date/Publication: 2020-11-09 20:40:02 UTC
+Date/Publication: 2021-04-23 21:40:02 UTC

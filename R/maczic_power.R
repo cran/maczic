@@ -299,8 +299,7 @@ maczic_power <- function(nsim, nsp, mtype, boot = FALSE, sims = 1000,
                       data = simdata1)
         }
       }
-      #clear the previous warnings
-      assign("last.warning", NULL, envir = baseenv())
+
       if (tolower(ydist) == "normal") {
         # Fit REG model for outcome y with mediator m
         if (e1g == 0 && e2g == 0 && e3g == 0) {
@@ -739,11 +738,11 @@ maczic_power <- function(nsim, nsp, mtype, boot = FALSE, sims = 1000,
     ee.d0.p[i] <- ee$d0.p
     ee.tau.p[i] <- ee$tau.p
 
-    ee.z1.rej[i] <- ifelse(ee.z1.p[i] < 0.05, 1, 0)
-    ee.z0.rej[i] <- ifelse(ee.z0.p[i] < 0.05, 1, 0)
-    ee.d1.rej[i] <- ifelse(ee.d1.p[i] < 0.05, 1, 0)
-    ee.d0.rej[i] <- ifelse(ee.d0.p[i] < 0.05, 1, 0)
-    ee.tau.rej[i] <- ifelse(ee.tau.p[i] < 0.05, 1, 0)
+    ee.z1.rej[i] <- ifelse(ee.z1.p[i] <= 0.05, 1, 0)
+    ee.z0.rej[i] <- ifelse(ee.z0.p[i] <= 0.05, 1, 0)
+    ee.d1.rej[i] <- ifelse(ee.d1.p[i] <= 0.05, 1, 0)
+    ee.d0.rej[i] <- ifelse(ee.d0.p[i] <= 0.05, 1, 0)
+    ee.tau.rej[i] <- ifelse(ee.tau.p[i] <= 0.05, 1, 0)
 
   }
 
