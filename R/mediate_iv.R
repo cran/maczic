@@ -184,94 +184,111 @@ mediate_iv <- function(y, z, m, zm.int = FALSE, ydist = "poisson",
       print(paste("Bootstrap iteration:", b), quote = FALSE)
     }
 
-    #Resampling Step
-    index <- sample(1:n, n, replace = TRUE)
     if (b == sims + 1) {
       #use original data for the last iteration
       index <- 1:n
     }
-    if (is.null(x.nonIV)) {
-      x.nonIV.b <- NULL
-    }
-    else {
-      x.nonIV.b <- x.nonIV[index, ]
-    }
 
-    x.IV.b <- cbind(x.IV[index, ])
-    m.b <- m[index]
-    z.b <- z[index]
-    y.b <- y[index]
+    repeat {
+      #record number of warnings before resampling
+      n_warnings_pre <- length(warnings())
 
-    if (tolower(mtype) == "binary") {
-      if (is.null(x.nonIV.b)) {
-        model.m <- glm(m.b ~ z.b + x.IV.b + I(x.IV.b * z.b), family = binomial)
+      #Resampling Step
+      if (b != sims + 1) {
+        index <- sample(1:n, n, replace = TRUE)
+      }
+      if (is.null(x.nonIV)) {
+        x.nonIV.b <- NULL
       }
       else {
-        model.m <- glm(m.b ~ z.b + x.IV.b + x.nonIV.b + I(x.IV.b * z.b),
-                       family = binomial)
+        x.nonIV.b <- x.nonIV[index, ]
       }
 
-    } else if (tolower(mtype) == "continuous") {
-      if (is.null(x.nonIV.b)) {
-        model.m <- lm(m.b ~  z.b + x.IV.b + I(x.IV.b * z.b))
-      }
-      else {
-        model.m <- lm(m.b ~  z.b + x.IV.b + x.nonIV.b + I(x.IV.b * z.b))
-      }
-    }
-    else {
-      stop("Unsupported mediator type")
-    }
+      x.IV.b <- cbind(x.IV[index, ])
+      m.b <- m[index]
+      z.b <- z[index]
+      y.b <- y[index]
 
-    if (!zm.int) { #without z*m interaction
-      if (tolower(ydist) == "poisson") {
+      if (tolower(mtype) == "binary") {
         if (is.null(x.nonIV.b)) {
-          model.y <- glm(y.b ~ z.b + m.b + x.IV.b +
-                               resid(model.m, type = "response"),
-                               family = poisson)
-        } else {
-          model.y <- glm(y.b ~ z.b + m.b + x.IV.b + x.nonIV.b +
-                               resid(model.m, type = "response"),
-                               family = poisson)
+          model.m <- glm(m.b ~ z.b + x.IV.b + I(x.IV.b * z.b), family = binomial)
+        }
+        else {
+          model.m <- glm(m.b ~ z.b + x.IV.b + x.nonIV.b + I(x.IV.b * z.b),
+                         family = binomial)
+        }
+
+      } else if (tolower(mtype) == "continuous") {
+        if (is.null(x.nonIV.b)) {
+          model.m <- lm(m.b ~  z.b + x.IV.b + I(x.IV.b * z.b))
+        }
+        else {
+          model.m <- lm(m.b ~  z.b + x.IV.b + x.nonIV.b + I(x.IV.b * z.b))
         }
       }
-      else if (tolower(ydist) == "negbin" ||
-               tolower(ydist) == "neyman type a") {
+      else {
+        stop("Unsupported mediator type")
+      }
+
+      if (!zm.int) { #without z*m interaction
+        if (tolower(ydist) == "poisson") {
           if (is.null(x.nonIV.b)) {
-          model.y <- glm.nb(y.b ~ z.b + m.b + x.IV.b +
-                                  resid(model.m, type = "response"))
+            model.y <- glm(y.b ~ z.b + m.b + x.IV.b +
+                             resid(model.m, type = "response"),
+                           family = poisson)
+          } else {
+            model.y <- glm(y.b ~ z.b + m.b + x.IV.b + x.nonIV.b +
+                             resid(model.m, type = "response"),
+                           family = poisson)
+          }
         }
-        else {
-          model.y <- glm.nb(y.b ~ z.b + m.b + x.IV.b + x.nonIV.b +
-                                  resid(model.m, type = "response"))
-        }
-      }
-    }
-    else if (zm.int)  { #with z*m interaction
-      if (tolower(ydist) == "poisson") {
-        if (is.null(x.nonIV.b)) {
-          model.y <- glm(y.b ~ z.b + m.b + I(z.b * m.b) + x.IV.b +
-                               resid(model.m, type = "response"),
-                               family = poisson)
-        }
-        else {
-          model.y <- glm(y.b ~ z.b + m.b + I(z.b * m.b) + x.IV.b + x.nonIV +
-                               resid(model.m, type = "response"),
-                               family = poisson)
-        }
-      }
-      else if (tolower(ydist) == "negbin" ||
-               tolower(ydist) == "neyman type a") {
-        if (is.null(x.nonIV.b)) {
-          model.y <- glm.nb(y.b ~ z.b + m.b + I(z.b * m.b) + x.IV.b +
+        else if (tolower(ydist) == "negbin" ||
+                 tolower(ydist) == "neyman type a") {
+          if (is.null(x.nonIV.b)) {
+            model.y <- glm.nb(y.b ~ z.b + m.b + x.IV.b +
                                 resid(model.m, type = "response"))
-        }
-        else {
-          model.y <- glm.nb(y.b ~ z.b + m.b + I(z.b * m.b) + x.IV.b + x.nonIV.b
-                                  + resid(model.m, type = "response"))
+          }
+          else {
+            model.y <- glm.nb(y.b ~ z.b + m.b + x.IV.b + x.nonIV.b +
+                                resid(model.m, type = "response"))
+          }
         }
       }
+      else if (zm.int)  { #with z*m interaction
+        if (tolower(ydist) == "poisson") {
+          if (is.null(x.nonIV.b)) {
+            model.y <- glm(y.b ~ z.b + m.b + I(z.b * m.b) + x.IV.b +
+                             resid(model.m, type = "response"),
+                           family = poisson)
+          }
+          else {
+            model.y <- glm(y.b ~ z.b + m.b + I(z.b * m.b) + x.IV.b + x.nonIV +
+                             resid(model.m, type = "response"),
+                           family = poisson)
+          }
+        }
+        else if (tolower(ydist) == "negbin" ||
+                 tolower(ydist) == "neyman type a") {
+          if (is.null(x.nonIV.b)) {
+            model.y <- glm.nb(y.b ~ z.b + m.b + I(z.b * m.b) + x.IV.b +
+                                resid(model.m, type = "response"))
+          }
+          else {
+            model.y <- glm.nb(y.b ~ z.b + m.b + I(z.b * m.b) + x.IV.b + x.nonIV.b
+                              + resid(model.m, type = "response"))
+          }
+        }
+      }
+
+      #record number of warnings again after all the model fittings
+      n_warnings_post <- length(warnings())
+      #if there are no new warnings then the resampling data for a bootstrap
+      #iteration would be kept
+      if (n_warnings_post==n_warnings_pre || b == sims + 1) {
+        break
+      }
     }
+
     ncoef.model.y <- length(coef(model.y)) - 1
 
     #run with (n.init) set of initial values
@@ -502,6 +519,8 @@ mediate_iv <- function(y, z, m, zm.int = FALSE, ydist = "poisson",
   else {
     stop("Unsupported outcome distribution")
   }
+
+  #warnings()
   ter <- as.numeric(exp(coef(model.y.te)[2]))
 
   ## optimize with respect to beta

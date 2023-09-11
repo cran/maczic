@@ -150,11 +150,15 @@ be passed, e.g. 'parallel' and 'ncpus'.}
   \item{d.avg.p, z.avg.p, n.avg.p}{two-sided p-values for the above.}
   \item{d.avg.sims, z.avg.sims, n.avg.sims}{vectors of length 'sims'
   containing simulation draws of d.avg, z.avg and n.avg, respectively.}
-  \item{boot}{logical, the 'boot' argument used.}
+  \item{boot}{logical, the 'boot' argument used. If 'FALSE' a quasi-Bayesian
+  approximation was used for confidence intervals; if 'TRUE' nonparametric
+  bootstrap was used}
+  \item{boot.ci.type}{a character string 'perc' indicating percentile
+  bootstrap confidence intervals were estimated if the argument boot = TRUE}
   \item{treat}{a character string indicating the name of the 'treat' variable
-  used.}
+  used in the models.}
   \item{mediator}{a character string indicating the name of the 'mediator'
-  variable used.}
+  variable used in the models.}
   \item{INT}{a logical value indicating whether the model specification
   allows the effects to differ between the treatment and control conditions.}
   \item{conf.level}{the confidence level used. }
@@ -191,6 +195,7 @@ yFit <- zeroinfl(Untreated_W3 ~ intervention + PBrushBedt_6 + BrushTimes_W2
                                 + HealthyMeals_W2 + PBrush_W2+ PDVisit_6,
                  data = midvd_bt100)
 # For illustration purposes a small number of simulations are used
+# Estimation via Quasi-Bayesian approximation
 ee <-mediate_zi_vcoef(uFit, delta.beta.u = 0.01, mFit, yFit, sims = 100,
                       treat = "intervention", mediator = "PBrushBedt_6",
                       confounder ="PDVisit_6")

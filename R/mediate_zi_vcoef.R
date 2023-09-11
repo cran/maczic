@@ -62,11 +62,15 @@
 #'   \item{d.avg.p, z.avg.p, n.avg.p}{two-sided p-values for the above.}
 #'   \item{d.avg.sims, z.avg.sims, n.avg.sims}{vectors of length 'sims'
 #'   containing simulation draws of d.avg, z.avg and n.avg, respectively.}
-#'   \item{boot}{logical, the 'boot' argument used.}
+#'   \item{boot}{logical, the 'boot' argument used. If 'FALSE' a quasi-Bayesian
+#'   approximation was used for confidence intervals; if 'TRUE' nonparametric
+#'   bootstrap was used}
+#'   \item{boot.ci.type}{a character string 'perc' indicating percentile
+#'   bootstrap confidence intervals were estimated if the argument boot = TRUE}
 #'   \item{treat}{a character string indicating the name of the 'treat' variable
-#'   used.}
+#'   used in the models.}
 #'   \item{mediator}{a character string indicating the name of the 'mediator'
-#'   variable used.}
+#'   variable used in the models.}
 #'   \item{INT}{a logical value indicating whether the model specification
 #'   allows the effects to differ between the treatment and control conditions.}
 #'   \item{conf.level}{the confidence level used. }
@@ -132,6 +136,7 @@
 #'                                 + HealthyMeals_W2 + PBrush_W2+ PDVisit_6,
 #'                  data = midvd_bt100)
 #' # For illustration purposes a small number of simulations are used
+#' # Estimation via Quasi-Bayesian approximation
 #' ee <-mediate_zi_vcoef(uFit, delta.beta.u = 0.01, mFit, yFit, sims = 100,
 #'                       treat = "intervention", mediator = "PBrushBedt_6",
 #'                       confounder ="PDVisit_6")
@@ -996,7 +1001,8 @@ mediate_zi_vcoef <- function(model.u, delta.beta.u, model.m, model.y,
       ########################################################################
       ## Case I-2: Nonparametric Bootstrap
       ########################################################################
-    } else {
+    }
+    else {
 
       Call.U <- getCall(model.u)
       Call.M <- getCall(model.m)
@@ -1556,7 +1562,8 @@ mediate_zi_vcoef <- function(model.u, delta.beta.u, model.m, model.y,
                   z.avg.sims = zeta.avg,
                   n.avg = n.avg, n.avg.p = n.avg.p, n.avg.ci = n.avg.ci,
                   n.avg.sims = nu.avg,
-                  boot = boot, treat = treat, confounder = confounder,
+                  boot = boot, boot.ci.type="perc",
+                  treat = treat, confounder = confounder,
                   covariates = covariates,
                   INT = INT, conf.level = conf.level,
                   model.y = model.y, model.u = model.u,
@@ -1573,7 +1580,7 @@ mediate_zi_vcoef <- function(model.u, delta.beta.u, model.m, model.y,
                   d.avg = d.avg, d.avg.p = d.avg.p, d.avg.ci = d.avg.ci,
                   z.avg = z.avg, z.avg.p = z.avg.p, z.avg.ci = z.avg.ci,
                   n.avg = n.avg, n.avg.p = n.avg.p, n.avg.ci = n.avg.ci,
-                  boot = boot, treat = treat, confounder = confounder,
+                  boot = boot, boot.ci.type="perc", treat = treat, confounder = confounder,
                   covariates = covariates,
                   INT = INT, conf.level = conf.level,
                   model.y = model.y, model.u = model.u,
@@ -2057,7 +2064,8 @@ mediate_zi_vcoef <- function(model.u, delta.beta.u, model.m, model.y,
                   z0 = z0, z1 = z1, z0.ci = z0.ci, z1.ci = z1.ci,
                   z0.p = z0.p, z1.p = z1.p,
                   z1.sims = zeta.1, z0.sims = zeta.0, tau.sims = tau,
-                  boot = boot, treat = treat, confounder = confounder,
+                  boot = boot, boot.ci.type ="perc",
+                  treat = treat, confounder = confounder,
                   covariates = covariates,
                   INT = INT, conf.level = conf.level,
                   model.y = model.y, model.u = model.u,
@@ -2068,7 +2076,8 @@ mediate_zi_vcoef <- function(model.u, delta.beta.u, model.m, model.y,
                   tau.coef = tau.coef, tau.ci = tau.ci, tau.p = tau.p,
                   z0 = z0, z1 = z1, z0.ci = z0.ci, z1.ci = z1.ci,
                   z0.p = z0.p, z1.p = z1.p,
-                  boot = boot, treat = treat, confounder = confounder,
+                  boot = boot, boot.ci.type ="perc",
+                  treat = treat, confounder = confounder,
                   covariates = covariates,
                   INT = INT, conf.level = conf.level,
                   model.y = model.y, model.u = model.u,

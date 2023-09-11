@@ -43,6 +43,8 @@
 #' @param outcome A character string indicating the name of the outcome
 #'   variable in `model.y'. Only necessary if 'model.y' is of class 'survreg';
 #'   otherwise ignored.Default is NULL.
+#' @param digits integer indicating the number of decimal places to round
+#'   the values to be returned. Default is 3.
 #' @param xlab,ylab Labels for x and y axes, as in \code{\link{plot}}.
 #'   Default xlab = "Beta.u", ylab = "Effect".
 #' @param xlim,ylim Ranges of x and y axes, as in \code{\link{plot}}.
@@ -117,7 +119,7 @@ plot_sensitivity <- function(model.u, n.beta.u = 10, model.m, model.y,
                              sims = 1000, boot = FALSE,
                              confounder ="confd.name", treat = "treat.name",
                              mediator = "med.name", covariates = NULL,
-                             outcome = NULL,
+                             outcome = NULL, digits=3,
                              xlab = "Beta.u", ylab = "Effect", xlim = NULL,
                              ylim = NULL, main = NULL,  type = "l",
                              col = c("black", "black", "black"), pch = NULL,
@@ -166,6 +168,9 @@ plot_sensitivity <- function(model.u, n.beta.u = 10, model.m, model.y,
   #add legend
   legend(x = legend.x, y = legend.y, inset = legend.inset, legend = legend,
          col = col, lty = lty, horiz = legend.horiz)
+
+  #round the results
+  results<-round(results, digits=digits)
 
   return(results)
 }

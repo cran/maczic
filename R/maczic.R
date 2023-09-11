@@ -9,7 +9,8 @@
 #' mediator-outcome confounder by varing coefficient of treatment in the
 #' confounder model and plots sensitivity graph.
 #'
-#' @docType package
+#' @aliases maczic-package
+#'
 #' @name maczic
 #'
 #' @importFrom MASS mvrnorm gamma.shape polr rnegbin glm.nb
@@ -24,4 +25,5 @@
 #' @importFrom mediation mediate
 #' @importFrom emplik el.test
 #' @importFrom BB BBoptim
+#' @import mathjaxr
 NULL

@@ -36,13 +36,14 @@ maczic_power(
   e1g2 = 0,
   e2g2 = 0,
   e3g2 = 0,
-  delta2 = 0
+  delta2 = 0,
+  digits = 3
 )
 }
 \arguments{
 \item{nsim}{Number of simulations.}
 
-\item{nsp}{Total sample size.}
+\item{nsp}{Sample size.}
 
 \item{mtype}{Type of mediator, either 'binary' or 'continuous'.}
 
@@ -141,6 +142,9 @@ Poisson/Negative Binomial outcome. Default is 0.}
 \item{delta2}{User-specified value for the coefficient of
 treatment-by-mediator interaction in the zero-inflation model of
 zero-inflated Poisson/Negative Binomial outcome. Default is 0.}
+
+\item{digits}{Integer indicating the number of decimal places to round
+the values to be returned. Default is 3.}
 }
 \value{
 \code{maczic_power} returns a data frame with the following

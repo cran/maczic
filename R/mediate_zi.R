@@ -200,11 +200,15 @@
 #'   \item{d.avg.p, z.avg.p, n.avg.p}{two-sided p-values for the above.}
 #'   \item{d.avg.sims, z.avg.sims, n.avg.sims}{vectors of length 'sims'
 #'   containing simulation draws of d.avg, z.avg and n.avg, respectively.}
-#'   \item{boot}{logical, the 'boot' argument used.}
+#'   \item{boot}{logical, the 'boot' argument used. If 'FALSE' a quasi-Bayesian
+#'   approximation was used for confidence intervals; if 'TRUE' nonparametric
+#'   bootstrap was used}
+#'   \item{boot.ci.type}{a character string 'perc' indicating percentile
+#'   bootstrap confidence intervals were estimated if the argument boot = TRUE}
 #'   \item{treat}{a character string indicating the name of the 'treat' variable
-#'   used.}
+#'   used in the models}
 #'   \item{mediator}{a character string indicating the name of the 'mediator'
-#'   variable used.}
+#'   variable used in the models}
 #'   \item{INT}{a logical value indicating whether the model specification
 #'   allows the effects to differ between the treatment and control conditions.}
 #'   \item{conf.level}{the confidence level used. }
@@ -284,6 +288,10 @@
 #' # Estimation via Quasi-Bayesian approximation
 #' zipMA <- mediate_zi(mFit, yzipFit, sims = 100, treat = "z", mediator = "m")
 #' summary(zipMA)
+#' # Estimation via bootstrap approximation
+#' zipMA_bt <- mediate_zi(mFit, yzipFit, sims = 100, boot = TRUE, treat = "z",
+#' mediator = "m")
+#' summary(zipMA_bt)
 #'
 mediate_zi <- function(model.m, model.y, sims = 1000, boot = FALSE,
                        treat = "treat.name", mediator = "med.name",

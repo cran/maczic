@@ -16,6 +16,7 @@ plot_sensitivity(
   mediator = "med.name",
   covariates = NULL,
   outcome = NULL,
+  digits = 3,
   xlab = "Beta.u",
   ylab = "Effect",
   xlim = NULL,
@@ -71,6 +72,9 @@ Default is NULL.}
 \item{outcome}{A character string indicating the name of the outcome
 variable in `model.y'. Only necessary if 'model.y' is of class 'survreg';
 otherwise ignored.Default is NULL.}
+
+\item{digits}{integer indicating the number of decimal places to round
+the values to be returned. Default is 3.}
 
 \item{xlab, ylab}{Labels for x and y axes, as in \code{\link{plot}}.
 Default xlab = "Beta.u", ylab = "Effect".}

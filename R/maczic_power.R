@@ -9,7 +9,7 @@
 #' based on user-specified parameter values.
 #'
 #' @param nsim Number of simulations.
-#' @param nsp Total sample size.
+#' @param nsp Sample size.
 #' @param mtype Type of mediator, either 'binary' or 'continuous'.
 #' @param ydist Outcome distribution. Can be 'poisson', 'negbin', 'zip', 'zinb',
 #'   or 'normal'.
@@ -79,6 +79,8 @@
 #' @param delta2 User-specified value for the coefficient of
 #'   treatment-by-mediator interaction in the zero-inflation model of
 #'   zero-inflated Poisson/Negative Binomial outcome. Default is 0.
+#' @param digits Integer indicating the number of decimal places to round
+#'   the values to be returned. Default is 3.
 #'
 #' @return \code{maczic_power} returns a data frame with the following
 #'   components and prints them out in a matrix format:
@@ -165,7 +167,7 @@ maczic_power <- function(nsim, nsp, mtype, boot = FALSE, sims = 1000,
                          hpct0 = 100, px1, am, bm, e1m, e2m, e3m,
                          ag, bg, gg, e1g, e2g, e3g, delta = 0,
                          ag2=0, bg2=0, gg2=0, e1g2=0, e2g2=0, e3g2=0,
-                         delta2 = 0) {
+                         delta2 = 0, digits=3) {
   sim <- vector(length = nsim)
 
   te.d0 <- vector(length = nsim)
@@ -766,7 +768,8 @@ maczic_power <- function(nsim, nsp, mtype, boot = FALSE, sims = 1000,
                          pct0.y.z0, pct0.y.z1)
     # compute mean TE, rejection rate (power), and mean pct0_y
     mout <- colMeans(simout)
-    out <- mout
+    #round the results
+    mout<-round(mout, digits=digits)
 
     names(mout) <- c("True mediation effect in control",
                      "True mediation effect in treatment",
@@ -805,7 +808,9 @@ maczic_power <- function(nsim, nsp, mtype, boot = FALSE, sims = 1000,
 
     # compute mean TE, rejection rate (power)
     mout <- colMeans(simout)
-    out <- mout
+    #round the results
+    mout<-round(mout, digits=digits)
+
     names(mout) <- c("True mediation effect in control",
                      "True mediation effect in treatment",
                      "True direct effect in control",
@@ -822,7 +827,8 @@ maczic_power <- function(nsim, nsp, mtype, boot = FALSE, sims = 1000,
   }
   writeLines("\nResults:")
   prmatrix(mout_matrix, collab = rep("", 1))
-  return(out)
+
+  return(as.data.frame(mout))
 }
 
 #' function to get 1 simulation data - which includes z, m0, m1, x1, x2, x3,
